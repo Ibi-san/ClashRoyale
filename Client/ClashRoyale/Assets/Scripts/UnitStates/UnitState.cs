@@ -13,6 +13,9 @@ public abstract class UnitState : ScriptableObject
 
     public abstract void Finish();
 
+#if UNITY_EDITOR
+    public virtual void DebugDrawDistance(Unit unit) { }
+#endif
 }
 
 public enum UnitStateType

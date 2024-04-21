@@ -1,9 +1,10 @@
 using UnityEngine;
 
-[RequireComponent(typeof(UnitParameters))]
-public class Unit : MonoBehaviour
+[RequireComponent(typeof(UnitParameters), typeof(Health))]
+public class Unit : MonoBehaviour, IHealth
 {
-    [field: SerializeField] public bool IsEnemy { get; private set; } = false;
+    [field: SerializeField] public Health health { get; private set; }
+    [field: SerializeField] public bool isEnemy { get; private set; } = false;
     [field: SerializeField] public UnitParameters Parameters { get; private set; }
     [SerializeField] private UnitState _defaultStateSO;
     [SerializeField] private UnitState _chaseStateSO;
@@ -23,17 +24,17 @@ public class Unit : MonoBehaviour
         _attackState.Constructor(this);
 
         _currentState = _defaultState;
-        _chaseState.Init();
+        _currentState.Init();
     }
 
     private void Update()
     {
-        _chaseState.Run();
+        _currentState.Run();
     }
 
     public void SetState(UnitStateType type)
     {
-        _chaseState.Finish();
+        _currentState.Finish();
         
         switch (type)
         {
@@ -53,4 +54,13 @@ public class Unit : MonoBehaviour
         
         _currentState.Init();
     }
+
+#if UNITY_EDITOR
+    [Space(24)] [SerializeField] private bool _debug = false;
+    private void OnDrawGizmos()
+    {
+        if (_debug == false) return;
+        if (_chaseStateSO != null) _chaseStateSO.DebugDrawDistance(this);
+    }
+#endif
 }
