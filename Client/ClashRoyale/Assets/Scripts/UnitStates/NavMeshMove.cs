@@ -4,24 +4,43 @@ using UnityEngine.AI;
 [CreateAssetMenu(fileName = "_NavMeshMove", menuName = "UnitState/NavMeshMove")]
 public class NavMeshMove : UnitState
 {
-    [SerializeField] private bool _isEnemy = false;
-    [SerializeField] private float _moveOffset = 1f;
     private NavMeshAgent _agent;
     private Vector3 _targetPosition;
+    private bool _targetIsEnemy;
+    private Tower _nearestTower;
+
+    public override void Constructor(Unit unit)
+    {
+        base.Constructor(unit);
+
+        _targetIsEnemy = _unit.IsEnemy == false;
+        
+        _agent = _unit.GetComponent<NavMeshAgent>();
+        if(_agent == null) Debug.LogError($"Character {unit.name} has no component NavMeshAgent");
+        _agent.speed = _unit.Parameters.Speed;
+        _agent.radius = _unit.Parameters.ModelRadius;
+        _agent.stoppingDistance = _unit.Parameters.StartAttackDistance;
+    }
 
     public override void Init()
     {
-        _agent = _unit.GetComponent<NavMeshAgent>();
         Vector3 unitPosition = _unit.transform.position;
-        _targetPosition = MapInfo.Instance.GetNearestTowerPosition(unitPosition, _isEnemy == false);
+        _nearestTower = MapInfo.Instance.GetNearestTower(in unitPosition, _targetIsEnemy);
+        _targetPosition = _nearestTower.transform.position;
         _agent.SetDestination(_targetPosition);
     }
 
     public override void Run()
     {
-        float distanceToTarget = Vector3.Distance(_unit.transform.position, _targetPosition);
-        if (distanceToTarget <= _moveOffset)
+        TryAttackTower();
+    }
+
+    private void TryAttackTower()
+    {
+        float distanceToTarget = _nearestTower.GetDistance(_unit.transform.position);
+        if (distanceToTarget <= _unit.Parameters.StartAttackDistance)
         {
+            Debug.Log("StartingAttack");
             _unit.SetState(UnitStateType.Attack);
         }
     }
