@@ -3,12 +3,13 @@ using UnityEngine;
 
 public class Health : MonoBehaviour
 {
-    [field: SerializeField] public float Max { get; private set; } = 10f;
+    public event Action<float> UpdateHealth;
+    [field: SerializeField] public float max { get; private set; } = 10f;
     private float _current;
 
     private void Start()
     {
-        _current = Max;
+        _current = max;
     }
 
     public void ApplyDamage(float value)
@@ -16,7 +17,7 @@ public class Health : MonoBehaviour
         _current -= value;
         if (_current < 0) _current = 0;
         
-        Debug.Log($"Object {name}: before - {_current + value}, after {_current} ");
+        UpdateHealth?.Invoke(_current);
     }
 }
 
