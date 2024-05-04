@@ -64,4 +64,22 @@ public class MapInfo : MonoBehaviour
         
         return nearest;
     }
+
+    public void RemoveFromList<T>(T destroyable, bool enemy) where T : IDestroyable
+    {
+        if (destroyable is Unit unit)
+        {
+            if (enemy)
+                _enemyUnits.Remove(unit);
+            else
+                _playerUnits.Remove(unit);
+        }
+        else if (destroyable is Tower tower)
+        {
+            if (enemy)
+                _enemyTowers.Remove(tower);
+            else
+                _playerTowers.Remove(tower);
+        }
+    }
 }

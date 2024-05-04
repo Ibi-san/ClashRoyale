@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class Health : MonoBehaviour
 {
+    public Action Death;
     [SerializeField] private HealthUI _ui;
     [field: SerializeField] public float max { get; private set; } = 10f;
     private float _current;
@@ -15,7 +16,11 @@ public class Health : MonoBehaviour
     public void ApplyDamage(float value)
     {
         _current -= value;
-        if (_current < 0) _current = 0;
+        if (_current < 0)
+        {
+            _current = 0;
+            Death?.Invoke();
+        }
         UpdateHP();
     }
 
@@ -23,9 +28,4 @@ public class Health : MonoBehaviour
     {
         _ui.UpdateHealth(max, _current);
     }
-}
-
-interface IHealth
-{
-    Health health { get; }
 }
