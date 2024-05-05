@@ -6,7 +6,7 @@ public class Unit : MonoBehaviour, IHealth, IDestroyed
 {
     [field: SerializeField] public Health health { get; private set; }
     [field: SerializeField] public bool isEnemy { get; private set; } = false;
-    [field: SerializeField] public UnitParameters Parameters { get; private set; }
+    [field: SerializeField] public UnitParameters parameters { get; private set; }
     [SerializeField] private UnitState _defaultStateSO;
     [SerializeField] private UnitState _chaseStateSO;
     [SerializeField] private UnitState _attackStateSO;

@@ -10,5 +10,5 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1f5765d8c59e42d5aa3bf77856174f00, type: 3}
-  m_Name: Warrior_NavMeshChase
+  m_Name: Archer_NavMeshRangeChase
   m_EditorClassIdentifier: 

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -30,16 +29,27 @@ public class MapInfo : MonoBehaviour
 
     [SerializeField] private List<Tower> _playerTowers = new();
 
-    [SerializeField] private List<Unit> _enemyUnits = new();
+    [SerializeField] private List<Unit> _enemyWalkUnits = new();
+    [SerializeField] private List<Unit> _enemyFlyUnits = new();
 
-    [SerializeField] private List<Unit> _playerUnits = new();
+    [SerializeField] private List<Unit> _playerWalkUnits = new();
+    [SerializeField] private List<Unit> _playerFlyUnits = new();
 
     private void Start()
     {
         SubscribeDestroy(_enemyTowers);
         SubscribeDestroy(_playerTowers);
-        SubscribeDestroy(_enemyUnits);
-        SubscribeDestroy(_playerUnits);
+        SubscribeDestroy(_enemyWalkUnits);
+        SubscribeDestroy(_playerWalkUnits);
+    }
+
+    public void AddUnit(Unit unit)
+    {
+        List<Unit> list;
+        if (unit.isEnemy) list = unit.parameters.isFly ? _enemyFlyUnits : _enemyWalkUnits;
+        else list = unit.parameters.isFly ? _playerFlyUnits : _playerWalkUnits;
+        
+        AddObjectToList(list, unit);
     }
 
     public Tower GetNearestTower(in Vector3 currentPosition, bool enemy)
@@ -49,9 +59,33 @@ public class MapInfo : MonoBehaviour
         return GetNearest(currentPosition, towers, out float distance);
     }
 
-    public bool TryGetNearestUnit(in Vector3 currentPosition, bool enemy, out Unit unit, out float distance)
+    public bool TryGetNearestAnyUnit(in Vector3 currentPosition, bool enemy, out Unit unit, out float distance)
     {
-        List<Unit> units = enemy ? _enemyUnits : _playerUnits;
+        TryGetNearestWalkUnit(currentPosition, enemy, out Unit walk, out float walkDistance);
+        TryGetNearestFlyUnit(currentPosition, enemy, out Unit fly, out float flyDistance);
+
+        if (flyDistance < walkDistance)
+        {
+            unit = fly;
+            distance = flyDistance;
+        }
+        else
+        {
+            unit = walk;
+            distance = walkDistance;
+        }
+        
+        return unit;
+    }
+    public bool TryGetNearestWalkUnit(in Vector3 currentPosition, bool enemy, out Unit unit, out float distance)
+    {
+        List<Unit> units = enemy ? _enemyWalkUnits : _playerWalkUnits;
+        unit = GetNearest(currentPosition, units, out distance);
+        return unit;
+    }
+    public bool TryGetNearestFlyUnit(in Vector3 currentPosition, bool enemy, out Unit unit, out float distance)
+    {
+        List<Unit> units = enemy ? _enemyFlyUnits : _playerFlyUnits;
         unit = GetNearest(currentPosition, units, out distance);
         return unit;
     }

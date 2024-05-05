@@ -9,9 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d636760633594fc44b9815819c35eaa9, type: 3}
-  m_Name: Warrior_UsualAttack
+  m_Script: {fileID: 11500000, guid: 983ca79c9e9d4fa2b49c9b6698b6e61a, type: 3}
+  m_Name: Warrior_NavMeshMeleeChase
   m_EditorClassIdentifier: 
-  _damage: 1.5
-  _delay: 1
-  _stopAttackDistance: 0
