@@ -13,5 +13,4 @@ MonoBehaviour:
   m_Name: Archer_UsualRangeAttack
   m_EditorClassIdentifier: 
   _damage: 1.5
-  _delay: 1
-  _stopAttackDistance: 0
+  _arrow: {fileID: 8755879852292589037, guid: d9b07f52ff6118c4299ab472f83d17ac, type: 3}
