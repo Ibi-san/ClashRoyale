@@ -8,6 +8,8 @@ public class AuthorizationUI : MonoBehaviour
     [SerializeField] private InputField _password;
     [SerializeField] private Button _authorizationButton;
     [SerializeField] private Button _registrationButton;
+    [SerializeField] private GameObject _authorizationCanvas;
+    [SerializeField] private GameObject _registrationCanvas;
 
     private void Awake()
     {
@@ -15,12 +17,20 @@ public class AuthorizationUI : MonoBehaviour
         _password.onEndEdit.AddListener(_authorization.SetPassword);
 
         _authorizationButton.onClick.AddListener(SignInClick);
+        
+        _registrationButton.onClick.AddListener(RegistrationClick);
 
         _authorization.Error += () =>
         {
             _authorizationButton.gameObject.SetActive(true);
             _registrationButton.gameObject.SetActive(true);
         };
+    }
+
+    private void RegistrationClick()
+    {
+        _authorizationCanvas.SetActive(false);
+        _registrationCanvas.SetActive(true);
     }
 
     private void SignInClick()
