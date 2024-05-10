@@ -4,8 +4,27 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class PostSender : MonoBehaviour
+public class Network : MonoBehaviour
 {
+    #region Singleton
+
+    public static Network Instance { get; private set; }
+
+    private void Awake()
+    {
+        if (Instance)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
+
+    #endregion
+    
+
     public void Post(string uri, Dictionary<string, string> data, Action<string> success, Action<string> error = null) => StartCoroutine(PostAsync(uri, data, success, error));
 
     private IEnumerator PostAsync(string uri, Dictionary<string, string> data, Action<string> sucess, Action<string> error = null)
