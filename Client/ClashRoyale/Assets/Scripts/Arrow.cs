@@ -8,7 +8,7 @@ public class Arrow : MonoBehaviour
     public void Init(Vector3 targetPosition)
     {
         transform.LookAt(targetPosition);
-        _targetPosition = targetPosition;
+        _targetPosition = targetPosition + Vector3.up;
     }
 
     private void Update()
