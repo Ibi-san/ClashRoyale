@@ -9,9 +9,22 @@ public class DeckManager : MonoBehaviour
     [SerializeField] private List<Card> _selectedCards = new();
     public IReadOnlyList<Card> AvailableCards => _availableCards;
     public IReadOnlyList<Card> SelectedCards => _selectedCards;
-    
-    public event Action<IReadOnlyList<Card>> UpdateAvailable;
+
+    public event Action<IReadOnlyList<Card>, IReadOnlyList<Card>> UpdateAvailable;
     public event Action<IReadOnlyList<Card>> UpdateSelected;
+
+    #region Editor
+
+#if UNITY_EDITOR
+    [SerializeField] private AvailableDeckUI _availableDeckUI;
+
+    private void OnValidate()
+    {
+        _availableDeckUI.SetAllCardsCount(_cards);
+    }
+#endif
+
+    #endregion
 
     public void Init(List<int> availableCardsIndexes, int[] selectedCardsIndexes)
     {
@@ -24,8 +37,8 @@ public class DeckManager : MonoBehaviour
         {
             _selectedCards.Add(_cards[selectedCardsIndexes[i]]);
         }
-        
-        UpdateAvailable?.Invoke(AvailableCards);
+
+        UpdateAvailable?.Invoke(AvailableCards, SelectedCards);
         UpdateSelected?.Invoke(SelectedCards);
     }
 }
@@ -34,5 +47,6 @@ public class DeckManager : MonoBehaviour
 public class Card
 {
     [field: SerializeField] public string name { get; private set; }
+    [field: SerializeField] public int id { get; private set; }
     [field: SerializeField] public Sprite sprite { get; private set; }
 }
