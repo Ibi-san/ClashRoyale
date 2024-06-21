@@ -14,12 +14,17 @@ public class CardSelector : MonoBehaviour
 
     private void OnEnable()
     {
+        FillListFromManager();
+    }
+
+    private void FillListFromManager()
+    {
         _availableCards.Clear();
         for (int i = 0; i < _deckManager.AvailableCards.Count; i++)
         {
             _availableCards.Add(_deckManager.AvailableCards[i]);
         }
-        
+
         _selectedCards.Clear();
         for (int i = 0; i < _deckManager.SelectedCards.Count; i++)
         {
@@ -37,5 +42,27 @@ public class CardSelector : MonoBehaviour
         _selectedCards[_selectToggleIndex] = _availableCards[cardID - 1];
         _selectedDeckUI.UpdateCardsList(SelectedCards);
         _availableDeckUI.UpdateCardList(AvailableCards, SelectedCards);
+    }
+
+    public void SaveChanges()
+    {
+        _deckManager.ChangesDeck(SelectedCards, CloseChangesWindows);
+    }
+
+    public void CancelChanges()
+    {
+        FillListFromManager();
+        _selectedDeckUI.UpdateCardsList(SelectedCards);
+        _availableDeckUI.UpdateCardList(AvailableCards, SelectedCards);
+        CloseChangesWindows();
+    }
+
+    [Space(24), Header("Canvas switch")]
+    [SerializeField] private GameObject _mainCanvas;
+    [SerializeField] private GameObject _cardSelectCanvas;
+    public void CloseChangesWindows()
+    {
+        _mainCanvas.SetActive(true);
+        _cardSelectCanvas.SetActive(false);
     }
 }

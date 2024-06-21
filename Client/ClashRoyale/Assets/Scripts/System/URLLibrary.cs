@@ -5,4 +5,5 @@ public class URLLibrary
     public const string REGISTRATION = "Authorization/registration.php";
 
     public const string GETDECKINFO = "Game/getDeckInfo.php";
+    public const string SETSELECTDECK = "Game/setSelectDeck.php";
 }
