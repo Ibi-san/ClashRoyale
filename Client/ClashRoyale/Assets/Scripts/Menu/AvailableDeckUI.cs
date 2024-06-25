@@ -14,6 +14,10 @@ public class AvailableDeckUI : MonoBehaviour
 
     public void SetAllCardsCount(Card[] cards)
     {
+        //Condition for prevent auto-add because DestroyImmediate not work properly
+        if (_availableCardUI.Count != 0)
+            return;
+        
         for (int i = 0; i < _availableCardUI.Count; i++)
         {
             GameObject go = _availableCardUI[i].gameObject;
